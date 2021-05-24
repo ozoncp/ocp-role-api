@@ -1,6 +1,48 @@
 package utils
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/ozoncp/ocp-role-api/internal/model"
+)
+
+func SplitToBulks(roles []model.Role, butchSize uint) [][]model.Role {
+	if roles == nil || butchSize == 0 || butchSize < 0 {
+		return nil
+	}
+
+	l := uint(len(roles))
+
+	if butchSize > l {
+		return [][]model.Role{roles[:]}
+	}
+
+	capacity := l / butchSize
+	if l%butchSize > 0 {
+		capacity += 1
+	}
+	res := make([][]model.Role, 0, capacity)
+
+	i := uint(0)
+	for i < l {
+		end := i + butchSize
+		if end > l {
+			end = l
+		}
+		res = append(res, roles[i:end])
+		i = end
+	}
+
+	return res
+}
+
+func GetServiceRolesMap(roles []model.Role) map[string][]model.Role {
+	res := make(map[string][]model.Role, len(roles))
+	for _, r := range roles {
+		res[r.Service] = append(res[r.Service], r)
+	}
+	return res
+}
 
 func SplitSliceIntoChunks(slice []int, chunkSize int) [][]int {
 	if slice == nil || chunkSize == 0 || chunkSize < 0 {
