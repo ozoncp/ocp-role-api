@@ -44,6 +44,17 @@ func GetServiceRolesMap(roles []model.Role) map[string][]model.Role {
 	return res
 }
 
+func GetRolesMap(roles []model.Role) (map[string]model.Role, error) {
+	res := make(map[string]model.Role, len(roles))
+	for _, r := range roles {
+		if _, found := res[r.Service]; found {
+			return nil, fmt.Errorf("not unique key \"%s\"", r.Service)
+		}
+		res[r.Service] = r
+	}
+	return res, nil
+}
+
 func SplitSliceIntoChunks(slice []int, chunkSize int) [][]int {
 	if slice == nil || chunkSize == 0 || chunkSize < 0 {
 		return nil
