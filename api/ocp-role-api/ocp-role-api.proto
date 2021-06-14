@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+
+package ocp.role.api;
+
+option go_package = "github.com/ozoncp/ocp-role-api/pkg/ocp-role-api;ocp_role_api";
+
+
+service OcpRoleApi {
+    rpc ListRolesV1(ListRolesV1Request) returns (ListRolesV1Response) {
+        option (google.api.http) = {
+            get: "/v1/roles"
+        };
+    }
+
+    rpc DescribeRoleV1(DescribeRoleV1Request) returns (DescribeRoleV1Response) {
+        option (google.api.http) = {
+            get: "/v1/roles/{role_id}"
+        };
+    }
+
+    rpc CreateRoleV1(CreateRoleV1Request) returns (CreateRoleV1Response) {
+        option (google.api.http) = {
+            post: "/v1/roles"
+        };
+    }
+
+    rpc RemoveRoleV1(RemoveRoleV1Request) returns (RemoveRoleV1Response) {
+        option (google.api.http) = {
+            delete: "/v1/roles/{role_id}"
+        };
+    }
+}
+
+message ListRolesV1Request {
+    uint64 limit = 1;
+    uint64 offset = 2;
+}
+
+message ListRolesV1Response {
+    repeated Role roles = 1;
+}
+
+message CreateRoleV1Request {
+    string service = 1;
+    repeated Role operations = 2;
+}
+
+message CreateRoleV1Response {
+    uint64 role_id = 1;
+}
+
+message RemoveRoleV1Request {
+	uint64 role_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message RemoveRoleV1Response {
+    bool found = 1;
+}
+
+message DescribeRoleV1Request {
+	uint64 role_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message DescribeRoleV1Response {
+    Role role = 1;
+}
+
+message Role {
+    uint64 id = 1;
+    string service = 2;
+    repeated string operations = 3;
+}

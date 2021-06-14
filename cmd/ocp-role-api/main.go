@@ -2,42 +2,36 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"os"
+
+	"google.golang.org/grpc"
+
+	"log"
+	"net"
+
+	"github.com/ozoncp/ocp-role-api/internal/api"
+	pb "github.com/ozoncp/ocp-role-api/pkg/ocp-role-api"
 )
 
-func main() {
-	fmt.Println("Hello, ocp-role-api!")
+const grpcPort = ":82"
+
+func runGrpc() error {
+	listen, err := net.Listen("tcp", grpcPort)
+	if err != nil {
+		return fmt.Errorf("failed to listen: %w", err)
+	}
+
+	s := grpc.NewServer()
+	pb.RegisterOcpRoleApiServer(s, api.NewOcpRoleApi())
+
+	if err := s.Serve(listen); err != nil {
+		return fmt.Errorf("failed to serve: %w", err)
+	}
+
+	return nil
 }
 
-func OpenAndPrintFileInCycle(fname string, n int) error {
-	data := make([]byte, 128)
-
-	for i := 0; i < n; i++ {
-		err := func() error {
-			f, err := os.Open(fname)
-			if err != nil {
-				return fmt.Errorf("can't open file: %w", err)
-			}
-			defer f.Close()
-
-			for {
-				cnt, err := f.Read(data)
-				if err != nil && err != io.EOF {
-					return fmt.Errorf("can't read file: %w", err)
-				}
-				if cnt == 0 {
-					break
-				}
-				fmt.Printf("%s\n", data[:cnt])
-			}
-
-			return nil
-		}()
-
-		if err != nil {
-			return err
-		}
+func main() {
+	if err := runGrpc(); err != nil {
+		log.Fatalf("can't run grpc server: %v", err)
 	}
-	return nil
 }
