@@ -30,7 +30,6 @@ var _ = Describe("Flusher", func() {
 
 	BeforeEach(func() {
 		ctrl = gomock.NewController(GinkgoT())
-		// mockFlusher = mocks.NewMockFlusher(ctrl)
 		mockRepo = mocks.NewMockRepo(ctrl)
 	})
 
