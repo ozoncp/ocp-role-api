@@ -177,11 +177,8 @@
         "service": {
           "type": "string"
         },
-        "operations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "operation": {
+          "type": "string"
         }
       }
     },

@@ -1,6 +1,15 @@
-.PHONY: all .vendor-proto check build empty gen install-deps swagger
+.PHONY: all .vendor-proto check build empty gen install-deps swagger postgres
 
 empty: ;
+
+postgres:
+	docker run -d --rm \
+		--name pg \
+		-e POSTGRES_PASSWORD=postgres \
+		-e PGDATA=/var/lib/postgresql/data/pgdata \
+		-v /home/anttsov/workspace/go/src/github.com/ozoncp/ocp-role-api/psqldata:/var/lib/postgresql/data \
+		-p 5432:5432 \
+		postgres
 
 swagger:
 	docker run -p 80:8080 \

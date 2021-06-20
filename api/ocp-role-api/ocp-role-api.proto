@@ -45,7 +45,7 @@ message ListRolesV1Response {
 
 message CreateRoleV1Request {
     string service = 1;
-    repeated Role operations = 2;
+    string operation = 2;
 }
 
 message CreateRoleV1Response {
@@ -71,5 +71,5 @@ message DescribeRoleV1Response {
 message Role {
     uint64 id = 1;
     string service = 2;
-    repeated string operations = 3;
+    string operation = 3;
 }
