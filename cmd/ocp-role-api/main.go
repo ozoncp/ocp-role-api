@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 
 	"log"
@@ -59,8 +62,38 @@ func runGrpc() error {
 	return nil
 }
 
+func runHTTP() error {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	rmux := runtime.NewServeMux()
+	err := pb.RegisterOcpRoleApiHandlerFromEndpoint(
+		ctx, rmux, "localhost"+grpcPort, []grpc.DialOption{grpc.WithInsecure()})
+
+	if err != nil {
+		return err
+	}
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/swagger.json", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		//w.Header().Set("Access-Control-Allow-Origin", "localhost")
+		http.ServeFile(w, r, "swagger/api.swagger.json")
+	})
+	mux.Handle("/", rmux)
+
+	return http.ListenAndServe("localhost:8080", mux)
+}
+
 func main() {
-	if err := runGrpc(); err != nil {
-		log.Fatalf("can't run grpc server: %v", err)
+	go func() {
+		if err := runGrpc(); err != nil {
+			log.Fatalf("can't run grpc server: %v", err)
+		}
+	}()
+
+	if err := runHTTP(); err != nil {
+		log.Fatalf("can't run HTTP server: %v", err)
 	}
 }
