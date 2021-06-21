@@ -7,7 +7,7 @@ postgres:
 		--name pg \
 		-e POSTGRES_PASSWORD=postgres \
 		-e PGDATA=/var/lib/postgresql/data/pgdata \
-		-v /home/anttsov/workspace/go/src/github.com/ozoncp/ocp-role-api/psqldata:/var/lib/postgresql/data \
+		-v `pwd`/psqldata:/var/lib/postgresql/data \
 		-p 5432:5432 \
 		postgres
 
@@ -23,7 +23,7 @@ check: pkg/ocp-role-api/*.go internal/*/*.go cmd/*/*.go
 	go build  ./internal/*/ ./cmd/*/
 
 gen: pkg/ocp-role-api/*.go
-	go1.16.3 generate internal/mockgen.go
+	go generate internal/mockgen.go
 
 
 .vendor-proto: \
