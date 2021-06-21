@@ -6,6 +6,7 @@ import (
 )
 
 type Role struct {
+	Id        uint64
 	Service   string
 	Operation string
 }

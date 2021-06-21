@@ -196,20 +196,7 @@ func (m *CreateRoleV1Request) Validate() error {
 
 	// no validation rules for Service
 
-	for idx, item := range m.GetOperations() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CreateRoleV1RequestValidationError{
-					field:  fmt.Sprintf("Operations[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
+	// no validation rules for Operation
 
 	return nil
 }
@@ -633,6 +620,8 @@ func (m *Role) Validate() error {
 	// no validation rules for Id
 
 	// no validation rules for Service
+
+	// no validation rules for Operation
 
 	return nil
 }

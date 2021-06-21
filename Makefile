@@ -1,6 +1,15 @@
-.PHONY: all .vendor-proto check build empty gen install-deps swagger
+.PHONY: all .vendor-proto check build empty gen install-deps swagger postgres
 
 empty: ;
+
+postgres:
+	docker run -d --rm \
+		--name pg \
+		-e POSTGRES_PASSWORD=postgres \
+		-e PGDATA=/var/lib/postgresql/data/pgdata \
+		-v `pwd`/psqldata:/var/lib/postgresql/data \
+		-p 5432:5432 \
+		postgres
 
 swagger:
 	docker run -p 80:8080 \
@@ -14,7 +23,7 @@ check: pkg/ocp-role-api/*.go internal/*/*.go cmd/*/*.go
 	go build  ./internal/*/ ./cmd/*/
 
 gen: pkg/ocp-role-api/*.go
-	go1.16.3 generate internal/mockgen.go
+	go generate internal/mockgen.go
 
 
 .vendor-proto: \
