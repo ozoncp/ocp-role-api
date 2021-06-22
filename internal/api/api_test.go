@@ -13,6 +13,7 @@ import (
 
 	"github.com/ozoncp/ocp-role-api/internal/api"
 	"github.com/ozoncp/ocp-role-api/internal/model"
+	"github.com/ozoncp/ocp-role-api/internal/producer"
 	"github.com/ozoncp/ocp-role-api/internal/repo"
 	ocp_role_api "github.com/ozoncp/ocp-role-api/pkg/ocp-role-api"
 )
@@ -33,12 +34,12 @@ var _ = Describe("Api", func() {
 		Expect(err).ShouldNot(HaveOccurred())
 
 		storage = repo.New(sqlx.NewDb(db, "pgx"))
-		grpcApi = api.NewOcpRoleApi(storage)
+		grpcApi = api.NewOcpRoleApi(storage, producer.NewNullProducer())
 
 		roles = []*model.Role{
-			{Id: 0, Service: "s1", Operation: "op1"},
-			{Id: 1, Service: "s1", Operation: "op2"},
-			{Id: 2, Service: "s2", Operation: "op2"},
+			{Id: 1, Service: "s1", Operation: "op1"},
+			{Id: 2, Service: "s1", Operation: "op2"},
+			{Id: 3, Service: "s2", Operation: "op2"},
 		}
 	})
 
@@ -132,7 +133,7 @@ var _ = Describe("Api", func() {
 		})
 	})
 
-	It("AddRoleV1", func() {
+	It("CreateRoleV1", func() {
 		role := roles[0]
 		mockSQL.ExpectQuery("INSERT INTO roles").
 			WithArgs(role.Service, role.Operation).
@@ -150,6 +151,83 @@ var _ = Describe("Api", func() {
 
 		Expect(err).ShouldNot(HaveOccurred())
 		Expect(resp.RoleId).Should(Equal(role.Id))
+	})
+
+	It("MultiCreateRoleV1", func() {
+		mockSQL.ExpectQuery("INSERT INTO roles").
+			WithArgs(
+				roles[0].Service, roles[1].Operation,
+				roles[1].Service, roles[2].Operation).
+			WillReturnRows(
+				sqlmock.NewRows(
+					[]string{"id"}).
+					AddRow(roles[0].Id).
+					AddRow(roles[1].Id),
+			)
+
+		resp, err := grpcApi.MultiCreateRoleV1(
+			context.Background(),
+			&ocp_role_api.MultiCreateRoleV1Request{
+				Roles: []*ocp_role_api.MultiCreateRoleV1Request_Role{
+					{
+						Service:   roles[0].Service,
+						Operation: roles[1].Operation,
+					},
+					{
+						Service:   roles[0].Service,
+						Operation: roles[1].Operation,
+					},
+				},
+			},
+		)
+
+		Expect(err).ShouldNot(HaveOccurred())
+		Expect(resp.RoleIds).Should(HaveLen(2))
+		Expect(resp.RoleIds).Should(Equal([]uint64{roles[0].Id, roles[1].Id}))
+	})
+
+	Context("UpdateRoleV1", func() {
+		var q *sqlmock.ExpectedExec
+
+		BeforeEach(func() {
+			q = mockSQL.ExpectExec("UPDATE roles").
+				WithArgs(roles[0].Service, roles[0].Operation, roles[0].Id)
+		})
+
+		It("id found", func() {
+			rowsAffected := int64(1)
+
+			q.WillReturnResult(sqlmock.NewResult(0, rowsAffected))
+
+			resp, err := grpcApi.UpdateRoleV1(
+				context.Background(),
+				&ocp_role_api.UpdateRoleV1Request{
+					RoleId:    roles[0].Id,
+					Service:   roles[0].Service,
+					Operation: roles[0].Operation,
+				},
+			)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(resp.Found).Should(Equal(true))
+		})
+
+		It("id not found", func() {
+			rowsAffected := int64(0)
+
+			q.WillReturnResult(sqlmock.NewResult(1, rowsAffected))
+			resp, err := grpcApi.UpdateRoleV1(
+				context.Background(),
+				&ocp_role_api.UpdateRoleV1Request{
+					RoleId:    roles[0].Id,
+					Service:   roles[0].Service,
+					Operation: roles[0].Operation,
+				},
+			)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(resp.Found).Should(Equal(false))
+		})
 	})
 
 	Context("RemoveRoleV1", func() {

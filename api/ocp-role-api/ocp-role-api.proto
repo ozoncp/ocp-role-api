@@ -24,6 +24,21 @@ service OcpRoleApi {
     rpc CreateRoleV1(CreateRoleV1Request) returns (CreateRoleV1Response) {
         option (google.api.http) = {
             post: "/v1/roles"
+            body: "*"
+        };
+    }
+
+    rpc MultiCreateRoleV1(MultiCreateRoleV1Request) returns (MultiCreateRoleV1Response) {
+        option (google.api.http) = {
+            post: "/v1/multi_roles"
+            body: "*"
+        };
+    }
+
+    rpc UpdateRoleV1(UpdateRoleV1Request) returns (UpdateRoleV1Response) {
+        option (google.api.http) = {
+            post: "/v1/roles/{role_id}"
+            body: "*"
         };
     }
 
@@ -50,6 +65,29 @@ message CreateRoleV1Request {
 
 message CreateRoleV1Response {
     uint64 role_id = 1;
+}
+
+
+message MultiCreateRoleV1Request {
+    message Role {
+        string service = 1;
+        string operation = 2;        
+    }
+    repeated Role roles = 1 [(validate.rules).repeated.min_items = 1];
+}
+
+message MultiCreateRoleV1Response {
+    repeated uint64 role_ids = 1;
+}
+
+message UpdateRoleV1Request {
+	uint64 role_id = 1 [(validate.rules).uint64.gt = 0];
+    string service = 2;
+    string operation = 3;
+}
+
+message UpdateRoleV1Response {
+    bool found = 1;
 }
 
 message RemoveRoleV1Request {

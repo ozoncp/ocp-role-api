@@ -12,8 +12,9 @@ import (
 type Repo interface {
 	DescribeRole(id uint64) (*model.Role, error)
 	AddRole(r *model.Role) (uint64, error)
-	AddRoles(r []*model.Role) error
-	RemoveRole(id uint64) (bool, error)
+	AddRoles(r []*model.Role) ([]uint64, error)
+	UpdateRole(role *model.Role) (found bool, err error)
+	RemoveRole(id uint64) (found bool, err error)
 	ListRoles(limit, offset uint64) ([]*model.Role, error)
 }
 
@@ -99,18 +100,59 @@ func (s *roleRepo) AddRole(r *model.Role) (uint64, error) {
 	return id, nil
 }
 
-func (s *roleRepo) AddRoles(rs []*model.Role) error {
+func (s *roleRepo) AddRoles(roles []*model.Role) ([]uint64, error) {
 	query := sq.Insert("roles").
-		Columns("id", "service", "operation").
+		Columns("service", "operation").
+		Suffix(`RETURNING "id"`).
 		RunWith(s.db).
 		PlaceholderFormat(sq.Dollar)
 
-	for _, r := range rs {
-		query = query.Values(r.Id, r.Service, r.Operation)
+	for _, r := range roles {
+		query = query.Values(r.Service, r.Operation)
 	}
 
-	_, err := query.ExecContext(s.ctx)
-	return err
+	rows, err := query.QueryContext(s.ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	ids := make([]uint64, 0)
+
+	for rows.Next() {
+		var id uint64
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return ids, err
+}
+
+func (s *roleRepo) UpdateRole(role *model.Role) (found bool, err error) {
+	query := sq.Update("roles").
+		Set("service", role.Service).
+		Set("operation", role.Operation).
+		Where(sq.Eq{"id": role.Id}).
+		RunWith(s.db).
+		PlaceholderFormat(sq.Dollar)
+
+	res, err := query.ExecContext(s.ctx)
+	if err != nil {
+		return false, err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+
+	return rowsAffected > 0, err
 }
 
 func (s *roleRepo) RemoveRole(id uint64) (found bool, err error) {

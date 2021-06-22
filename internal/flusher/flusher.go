@@ -26,7 +26,7 @@ func (f *flusher) Flush(roles []*model.Role) []*model.Role {
 		}
 		chunk := roles[i:j]
 
-		if err := f.roleRepo.AddRoles(chunk); err != nil {
+		if _, err := f.roleRepo.AddRoles(chunk); err != nil {
 			return roles[i:]
 		}
 	}

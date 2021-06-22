@@ -80,6 +80,21 @@ func (mr *MockApiServerMockRecorder) ListRolesV1(arg0, arg1 interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRolesV1", reflect.TypeOf((*MockApiServer)(nil).ListRolesV1), arg0, arg1)
 }
 
+// MultiCreateRoleV1 mocks base method.
+func (m *MockApiServer) MultiCreateRoleV1(arg0 context.Context, arg1 *ocp_role_api.MultiCreateRoleV1Request) (*ocp_role_api.MultiCreateRoleV1Response, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MultiCreateRoleV1", arg0, arg1)
+	ret0, _ := ret[0].(*ocp_role_api.MultiCreateRoleV1Response)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MultiCreateRoleV1 indicates an expected call of MultiCreateRoleV1.
+func (mr *MockApiServerMockRecorder) MultiCreateRoleV1(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiCreateRoleV1", reflect.TypeOf((*MockApiServer)(nil).MultiCreateRoleV1), arg0, arg1)
+}
+
 // RemoveRoleV1 mocks base method.
 func (m *MockApiServer) RemoveRoleV1(arg0 context.Context, arg1 *ocp_role_api.RemoveRoleV1Request) (*ocp_role_api.RemoveRoleV1Response, error) {
 	m.ctrl.T.Helper()
@@ -93,6 +108,21 @@ func (m *MockApiServer) RemoveRoleV1(arg0 context.Context, arg1 *ocp_role_api.Re
 func (mr *MockApiServerMockRecorder) RemoveRoleV1(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRoleV1", reflect.TypeOf((*MockApiServer)(nil).RemoveRoleV1), arg0, arg1)
+}
+
+// UpdateRoleV1 mocks base method.
+func (m *MockApiServer) UpdateRoleV1(arg0 context.Context, arg1 *ocp_role_api.UpdateRoleV1Request) (*ocp_role_api.UpdateRoleV1Response, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRoleV1", arg0, arg1)
+	ret0, _ := ret[0].(*ocp_role_api.UpdateRoleV1Response)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateRoleV1 indicates an expected call of UpdateRoleV1.
+func (mr *MockApiServerMockRecorder) UpdateRoleV1(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRoleV1", reflect.TypeOf((*MockApiServer)(nil).UpdateRoleV1), arg0, arg1)
 }
 
 // mustEmbedUnimplementedOcpRoleApiServer mocks base method.

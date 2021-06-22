@@ -6,7 +6,7 @@ import (
 	"github.com/ozoncp/ocp-role-api/internal/model"
 )
 
-func SplitToBulks(roles []model.Role, batchSize uint) [][]model.Role {
+func SplitToBulks(roles []*model.Role, batchSize uint) [][]*model.Role {
 	if roles == nil || batchSize == 0 {
 		return nil
 	}
@@ -14,14 +14,14 @@ func SplitToBulks(roles []model.Role, batchSize uint) [][]model.Role {
 	l := uint(len(roles))
 
 	if batchSize > l {
-		return [][]model.Role{roles[:]}
+		return [][]*model.Role{roles[:]}
 	}
 
 	capacity := l / batchSize
 	if l%batchSize > 0 {
 		capacity += 1
 	}
-	res := make([][]model.Role, 0, capacity)
+	res := make([][]*model.Role, 0, capacity)
 
 	i := uint(0)
 	for i < l {

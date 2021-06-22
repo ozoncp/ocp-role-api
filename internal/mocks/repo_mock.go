@@ -50,11 +50,12 @@ func (mr *MockRepoMockRecorder) AddRole(arg0 interface{}) *gomock.Call {
 }
 
 // AddRoles mocks base method.
-func (m *MockRepo) AddRoles(arg0 []*model.Role) error {
+func (m *MockRepo) AddRoles(arg0 []*model.Role) ([]uint64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddRoles", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].([]uint64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // AddRoles indicates an expected call of AddRoles.
@@ -106,4 +107,19 @@ func (m *MockRepo) RemoveRole(arg0 uint64) (bool, error) {
 func (mr *MockRepoMockRecorder) RemoveRole(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRole", reflect.TypeOf((*MockRepo)(nil).RemoveRole), arg0)
+}
+
+// UpdateRole mocks base method.
+func (m *MockRepo) UpdateRole(arg0 *model.Role) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRole", arg0)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateRole indicates an expected call of UpdateRole.
+func (mr *MockRepoMockRecorder) UpdateRole(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRole", reflect.TypeOf((*MockRepo)(nil).UpdateRole), arg0)
 }

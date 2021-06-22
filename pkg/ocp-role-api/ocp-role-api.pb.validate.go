@@ -326,6 +326,297 @@ var _ interface {
 	ErrorName() string
 } = CreateRoleV1ResponseValidationError{}
 
+// Validate checks the field values on MultiCreateRoleV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MultiCreateRoleV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetRoles() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return MultiCreateRoleV1RequestValidationError{
+					field:  fmt.Sprintf("Roles[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// MultiCreateRoleV1RequestValidationError is the validation error returned by
+// MultiCreateRoleV1Request.Validate if the designated constraints aren't met.
+type MultiCreateRoleV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MultiCreateRoleV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MultiCreateRoleV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MultiCreateRoleV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MultiCreateRoleV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MultiCreateRoleV1RequestValidationError) ErrorName() string {
+	return "MultiCreateRoleV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MultiCreateRoleV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMultiCreateRoleV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MultiCreateRoleV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MultiCreateRoleV1RequestValidationError{}
+
+// Validate checks the field values on MultiCreateRoleV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MultiCreateRoleV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// MultiCreateRoleV1ResponseValidationError is the validation error returned by
+// MultiCreateRoleV1Response.Validate if the designated constraints aren't met.
+type MultiCreateRoleV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MultiCreateRoleV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MultiCreateRoleV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MultiCreateRoleV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MultiCreateRoleV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MultiCreateRoleV1ResponseValidationError) ErrorName() string {
+	return "MultiCreateRoleV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MultiCreateRoleV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMultiCreateRoleV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MultiCreateRoleV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MultiCreateRoleV1ResponseValidationError{}
+
+// Validate checks the field values on UpdateRoleV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateRoleV1Request) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for RoleId
+
+	// no validation rules for Service
+
+	// no validation rules for Operation
+
+	return nil
+}
+
+// UpdateRoleV1RequestValidationError is the validation error returned by
+// UpdateRoleV1Request.Validate if the designated constraints aren't met.
+type UpdateRoleV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateRoleV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateRoleV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateRoleV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateRoleV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateRoleV1RequestValidationError) ErrorName() string {
+	return "UpdateRoleV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateRoleV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateRoleV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateRoleV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateRoleV1RequestValidationError{}
+
+// Validate checks the field values on UpdateRoleV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateRoleV1Response) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Found
+
+	return nil
+}
+
+// UpdateRoleV1ResponseValidationError is the validation error returned by
+// UpdateRoleV1Response.Validate if the designated constraints aren't met.
+type UpdateRoleV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateRoleV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateRoleV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateRoleV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateRoleV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateRoleV1ResponseValidationError) ErrorName() string {
+	return "UpdateRoleV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateRoleV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateRoleV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateRoleV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateRoleV1ResponseValidationError{}
+
 // Validate checks the field values on RemoveRoleV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -679,3 +970,75 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = RoleValidationError{}
+
+// Validate checks the field values on MultiCreateRoleV1Request_Role with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MultiCreateRoleV1Request_Role) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Service
+
+	// no validation rules for Operation
+
+	return nil
+}
+
+// MultiCreateRoleV1Request_RoleValidationError is the validation error
+// returned by MultiCreateRoleV1Request_Role.Validate if the designated
+// constraints aren't met.
+type MultiCreateRoleV1Request_RoleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MultiCreateRoleV1Request_RoleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MultiCreateRoleV1Request_RoleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MultiCreateRoleV1Request_RoleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MultiCreateRoleV1Request_RoleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MultiCreateRoleV1Request_RoleValidationError) ErrorName() string {
+	return "MultiCreateRoleV1Request_RoleValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MultiCreateRoleV1Request_RoleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMultiCreateRoleV1Request_Role.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MultiCreateRoleV1Request_RoleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MultiCreateRoleV1Request_RoleValidationError{}
