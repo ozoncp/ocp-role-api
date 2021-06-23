@@ -1,6 +1,7 @@
 package saver
 
 import (
+	"context"
 	"sync"
 	"time"
 
@@ -25,7 +26,15 @@ func New(capacity uint, flusher flusher.Flusher, opt Option) Saver {
 
 	opt(s)
 
+	ctx, cancel := context.WithCancel(context.Background())
+
 	go func() {
+		<-s.doneCh
+		cancel()
+	}()
+
+	go func() {
+		defer cancel()
 		tickerCh := s.ticker.C()
 
 		for {
@@ -55,15 +64,15 @@ func New(capacity uint, flusher flusher.Flusher, opt Option) Saver {
 					continue
 				}
 
-				data = s.flusher.Flush(getOrdered(data, end))
+				data = s.flusher.Flush(ctx, getOrdered(data, end))
 				if data != nil {
 					s.mu.Lock()
 					s.data = data
 					s.end = len(data)
 					s.mu.Unlock()
 				}
-			case <-s.doneCh:
-				break
+			case <-ctx.Done():
+				return
 			}
 		}
 	}()
@@ -107,8 +116,12 @@ func (s *saver) Save(role *model.Role) {
 func (s *saver) Close() {
 	s.ticker.Stop()
 	s.doneCh <- struct{}{}
+
 	if len(s.data) > 0 {
-		s.data = s.flusher.Flush(getOrdered(s.data, s.end))
+		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+		defer cancel()
+
+		s.data = s.flusher.Flush(ctx, getOrdered(s.data, s.end))
 		s.end = len(s.data)
 	}
 }

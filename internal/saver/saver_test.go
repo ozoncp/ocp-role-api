@@ -50,7 +50,7 @@ var _ = Describe("Saver", func() {
 			onFlush := func(_ []*model.Role) { sig <- struct{}{} }
 
 			gomock.InOrder(
-				mockFlusher.EXPECT().Flush(roles[0:1]).Do(onFlush),
+				mockFlusher.EXPECT().Flush(gomock.Any(), roles[0:1]).Do(onFlush),
 				mockTicker.EXPECT().Stop().Do(func() { close(tickCh) }),
 			)
 
@@ -66,7 +66,7 @@ var _ = Describe("Saver", func() {
 
 			gomock.InOrder(
 				mockTicker.EXPECT().Stop().Do(func() { close(tickCh) }),
-				mockFlusher.EXPECT().Flush(roles[0:1]),
+				mockFlusher.EXPECT().Flush(gomock.Any(), roles[0:1]),
 			)
 
 			s.Save(roles[0])
@@ -79,7 +79,7 @@ var _ = Describe("Saver", func() {
 
 			gomock.InOrder(
 				mockTicker.EXPECT().Stop(),
-				mockFlusher.EXPECT().Flush(roles[1:3]),
+				mockFlusher.EXPECT().Flush(gomock.Any(), roles[1:3]),
 			)
 
 			s.Save(roles[0])
@@ -100,9 +100,9 @@ var _ = Describe("Saver", func() {
 			}
 
 			gomock.InOrder(
-				mockFlusher.EXPECT().Flush(roles[0:2]).DoAndReturn(onFlush),
+				mockFlusher.EXPECT().Flush(gomock.Any(), roles[0:2]).DoAndReturn(onFlush),
 				mockTicker.EXPECT().Stop(),
-				mockFlusher.EXPECT().Flush(roles[1:3]),
+				mockFlusher.EXPECT().Flush(gomock.Any(), roles[1:3]),
 			)
 
 			s.Save(roles[0])

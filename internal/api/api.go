@@ -42,7 +42,7 @@ func (a *api) ListRolesV1(ctx context.Context, req *pb.ListRolesV1Request) (*pb.
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	roles, err := a.r.ListRoles(req.Limit, req.Offset)
+	roles, err := a.r.ListRoles(ctx, req.Limit, req.Offset)
 	if err != nil {
 		return nil, internalError
 	}
@@ -69,7 +69,7 @@ func (a *api) DescribeRoleV1(ctx context.Context, req *pb.DescribeRoleV1Request)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	role, err := a.r.DescribeRole(req.RoleId)
+	role, err := a.r.DescribeRole(ctx, req.RoleId)
 	if err != nil {
 		return nil, internalError
 	}
@@ -90,10 +90,13 @@ func (a *api) CreateRoleV1(ctx context.Context, req *pb.CreateRoleV1Request) (*p
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	id, err := a.r.AddRole(&model.Role{
-		Service:   req.Service,
-		Operation: req.Operation,
-	})
+	id, err := a.r.AddRole(
+		ctx,
+		&model.Role{
+			Service:   req.Service,
+			Operation: req.Operation,
+		},
+	)
 
 	if err != nil {
 		return nil, internalError
@@ -134,7 +137,7 @@ func (a *api) MultiCreateRoleV1(
 				"MultiCreateRoleV1 child", opentracing.ChildOf(span.Context()))
 			defer childSpan.Finish()
 
-			ids, err := a.r.AddRoles(chunks[i])
+			ids, err := a.r.AddRoles(ctx, chunks[i])
 			if err != nil {
 				log.Error().Err(err)
 				return err
@@ -174,7 +177,7 @@ func (a *api) UpdateRoleV1(ctx context.Context, req *pb.UpdateRoleV1Request) (*p
 		Service:   req.Service,
 		Operation: req.Operation,
 	}
-	found, err := a.r.UpdateRole(&role)
+	found, err := a.r.UpdateRole(ctx, &role)
 
 	if err != nil {
 		return nil, internalError
@@ -197,7 +200,7 @@ func (a *api) RemoveRoleV1(ctx context.Context, req *pb.RemoveRoleV1Request) (*p
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	found, err := a.r.RemoveRole(req.RoleId)
+	found, err := a.r.RemoveRole(ctx, req.RoleId)
 
 	if err != nil {
 		return nil, internalError

@@ -81,7 +81,7 @@ message MultiCreateRoleV1Response {
 }
 
 message UpdateRoleV1Request {
-	uint64 role_id = 1 [(validate.rules).uint64.gt = 0];
+    uint64 role_id = 1 [(validate.rules).uint64.gt = 0];
     string service = 2;
     string operation = 3;
 }
