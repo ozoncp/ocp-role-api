@@ -37,7 +37,7 @@ service OcpRoleApi {
 
     rpc UpdateRoleV1(UpdateRoleV1Request) returns (UpdateRoleV1Response) {
         option (google.api.http) = {
-            post: "/v1/roles/{role_id}"
+            put: "/v1/roles/{role_id}"
             body: "*"
         };
     }

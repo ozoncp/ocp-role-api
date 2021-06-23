@@ -170,7 +170,7 @@
           "OcpRoleApi"
         ]
       },
-      "post": {
+      "put": {
         "operationId": "OcpRoleApi_UpdateRoleV1",
         "responses": {
           "200": {
