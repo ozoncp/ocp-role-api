@@ -53,11 +53,11 @@ func NewProducer(addrs []string, topic string) (Producer, error) {
 	}, nil
 }
 
-type nullProducer struct {
+type dummyProducer struct {
 }
 
-func NewNullProducer() Producer {
-	return &nullProducer{}
+func NewDummyProducer() Producer {
+	return &dummyProducer{}
 }
 
 type buffered struct {
@@ -120,10 +120,10 @@ func NewBuffered(p Producer, buffSize int) (ProducerBuffered, error) {
 	}, nil
 }
 
-func (*nullProducer) Send(Event) error {
+func (*dummyProducer) Send(Event) error {
 	return nil
 }
 
-func (*nullProducer) Close() error {
+func (*dummyProducer) Close() error {
 	return nil
 }

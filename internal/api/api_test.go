@@ -34,7 +34,7 @@ var _ = Describe("Api", func() {
 		Expect(err).ShouldNot(HaveOccurred())
 
 		storage = repo.New(sqlx.NewDb(db, "pgx"))
-		grpcApi = api.NewOcpRoleApi(storage, producer.NewNullProducer())
+		grpcApi = api.NewOcpRoleApi(storage, producer.NewDummyProducer())
 
 		roles = []*model.Role{
 			{Id: 1, Service: "s1", Operation: "op1"},
