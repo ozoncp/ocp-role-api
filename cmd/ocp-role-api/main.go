@@ -29,7 +29,7 @@ const (
 	dbPort           = 5432
 	dbUser           = "postgres"
 	dbPassword       = "postgres"
-	dbName           = "ocp_role_test"
+	dbName           = "ocp_role_api"
 	serviceName      = "ocp-role-api"
 	kafkaHostPort    = "127.0.0.1:9094"
 	kafkaTopic       = "test"
