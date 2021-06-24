@@ -11,6 +11,38 @@
     "application/json"
   ],
   "paths": {
+    "/v1/multi_roles": {
+      "post": {
+        "operationId": "OcpRoleApi_MultiCreateRoleV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiMultiCreateRoleV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiMultiCreateRoleV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "OcpRoleApi"
+        ]
+      }
+    },
     "/v1/roles": {
       "get": {
         "operationId": "OcpRoleApi_ListRolesV1",
@@ -64,6 +96,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateRoleV1Request"
+            }
+          }
+        ],
         "tags": [
           "OcpRoleApi"
         ]
@@ -127,10 +169,58 @@
         "tags": [
           "OcpRoleApi"
         ]
+      },
+      "put": {
+        "operationId": "OcpRoleApi_UpdateRoleV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateRoleV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateRoleV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "OcpRoleApi"
+        ]
       }
     }
   },
   "definitions": {
+    "apiCreateRoleV1Request": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        }
+      }
+    },
     "apiCreateRoleV1Response": {
       "type": "object",
       "properties": {
@@ -144,7 +234,7 @@
       "type": "object",
       "properties": {
         "role": {
-          "$ref": "#/definitions/apiRole"
+          "$ref": "#/definitions/roleapiRole"
         }
       }
     },
@@ -154,7 +244,41 @@
         "roles": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiRole"
+            "$ref": "#/definitions/roleapiRole"
+          }
+        }
+      }
+    },
+    "apiMultiCreateRoleV1Request": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiMultiCreateRoleV1RequestRole"
+          }
+        }
+      }
+    },
+    "apiMultiCreateRoleV1RequestRole": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        }
+      }
+    },
+    "apiMultiCreateRoleV1Response": {
+      "type": "object",
+      "properties": {
+        "role_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
           }
         }
       }
@@ -167,10 +291,10 @@
         }
       }
     },
-    "apiRole": {
+    "apiUpdateRoleV1Request": {
       "type": "object",
       "properties": {
-        "id": {
+        "role_id": {
           "type": "string",
           "format": "uint64"
         },
@@ -179,6 +303,14 @@
         },
         "operation": {
           "type": "string"
+        }
+      }
+    },
+    "apiUpdateRoleV1Response": {
+      "type": "object",
+      "properties": {
+        "found": {
+          "type": "boolean"
         }
       }
     },
@@ -191,6 +323,21 @@
         "value": {
           "type": "string",
           "format": "byte"
+        }
+      }
+    },
+    "roleapiRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "service": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
         }
       }
     },

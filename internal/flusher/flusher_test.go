@@ -1,6 +1,7 @@
 package flusher_test
 
 import (
+	"context"
 	"errors"
 
 	"github.com/golang/mock/gomock"
@@ -40,11 +41,13 @@ var _ = Describe("Flusher", func() {
 	Context("chunkSize: 1, save all roles", func() {
 		BeforeEach(func() {
 			f = flusher.New(1, mockRepo)
-			mockRepo.EXPECT().AddRoles(gomock.Any()).Times(3).Return(nil)
+			mockRepo.EXPECT().
+				AddRoles(gomock.Any(), gomock.Any()).
+				Times(3).Return(nil)
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo([]*model.Role(nil)))
 		})
 	})
@@ -52,11 +55,12 @@ var _ = Describe("Flusher", func() {
 	Context("chunkSize: 3, save all roles", func() {
 		BeforeEach(func() {
 			f = flusher.New(3, mockRepo)
-			mockRepo.EXPECT().AddRoles(roles).Times(1).Return(nil)
+			mockRepo.EXPECT().AddRoles(gomock.Any(), roles).
+				Times(1).Return(nil)
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo([]*model.Role(nil)))
 		})
 	})
@@ -64,11 +68,12 @@ var _ = Describe("Flusher", func() {
 	Context("chunkSize: 4, save all roles", func() {
 		BeforeEach(func() {
 			f = flusher.New(4, mockRepo)
-			mockRepo.EXPECT().AddRoles(roles).Times(1).Return(nil)
+			mockRepo.EXPECT().AddRoles(gomock.Any(), roles).
+				Times(1).Return(nil)
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo([]*model.Role(nil)))
 		})
 	})
@@ -76,11 +81,12 @@ var _ = Describe("Flusher", func() {
 	Context("chunkSize: 1, first AddRole returns error", func() {
 		BeforeEach(func() {
 			f = flusher.New(1, mockRepo)
-			mockRepo.EXPECT().AddRoles(gomock.Any()).Times(1).Return(errors.New(""))
+			mockRepo.EXPECT().AddRoles(gomock.Any(), gomock.Any()).
+				Times(1).Return(errors.New(""))
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo(roles))
 		})
 	})
@@ -89,13 +95,15 @@ var _ = Describe("Flusher", func() {
 		BeforeEach(func() {
 			f = flusher.New(1, mockRepo)
 			gomock.InOrder(
-				mockRepo.EXPECT().AddRoles(gomock.Any()).Times(1).Return(nil),
-				mockRepo.EXPECT().AddRoles(gomock.Any()).Times(1).Return(errors.New("")),
+				mockRepo.EXPECT().AddRoles(gomock.Any(), gomock.Any()).
+					Times(1).Return(nil),
+				mockRepo.EXPECT().AddRoles(gomock.Any(), gomock.Any()).
+					Times(1).Return(errors.New("")),
 			)
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo(roles[1:]))
 		})
 	})
@@ -104,13 +112,15 @@ var _ = Describe("Flusher", func() {
 		BeforeEach(func() {
 			f = flusher.New(2, mockRepo)
 			gomock.InOrder(
-				mockRepo.EXPECT().AddRoles(roles[0:2]).Times(1).Return(nil),
-				mockRepo.EXPECT().AddRoles(roles[2:3]).Times(1).Return(errors.New("")),
+				mockRepo.EXPECT().AddRoles(gomock.Any(), roles[0:2]).
+					Times(1).Return(nil),
+				mockRepo.EXPECT().AddRoles(gomock.Any(), roles[2:3]).
+					Times(1).Return(errors.New("")),
 			)
 		})
 
 		It("", func() {
-			rest = f.Flush(roles)
+			rest = f.Flush(context.Background(), roles)
 			Expect(rest).Should(BeEquivalentTo(roles[2:]))
 		})
 	})

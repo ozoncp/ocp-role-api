@@ -5,6 +5,7 @@
 package mocks
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -35,75 +36,91 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 }
 
 // AddRole mocks base method.
-func (m *MockRepo) AddRole(arg0 *model.Role) (uint64, error) {
+func (m *MockRepo) AddRole(arg0 context.Context, arg1 *model.Role) (uint64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddRole", arg0)
+	ret := m.ctrl.Call(m, "AddRole", arg0, arg1)
 	ret0, _ := ret[0].(uint64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // AddRole indicates an expected call of AddRole.
-func (mr *MockRepoMockRecorder) AddRole(arg0 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) AddRole(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRole", reflect.TypeOf((*MockRepo)(nil).AddRole), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRole", reflect.TypeOf((*MockRepo)(nil).AddRole), arg0, arg1)
 }
 
 // AddRoles mocks base method.
-func (m *MockRepo) AddRoles(arg0 []*model.Role) error {
+func (m *MockRepo) AddRoles(arg0 context.Context, arg1 []*model.Role) ([]uint64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddRoles", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret := m.ctrl.Call(m, "AddRoles", arg0, arg1)
+	ret0, _ := ret[0].([]uint64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // AddRoles indicates an expected call of AddRoles.
-func (mr *MockRepoMockRecorder) AddRoles(arg0 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) AddRoles(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoles", reflect.TypeOf((*MockRepo)(nil).AddRoles), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoles", reflect.TypeOf((*MockRepo)(nil).AddRoles), arg0, arg1)
 }
 
 // DescribeRole mocks base method.
-func (m *MockRepo) DescribeRole(arg0 uint64) (*model.Role, error) {
+func (m *MockRepo) DescribeRole(arg0 context.Context, arg1 uint64) (*model.Role, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DescribeRole", arg0)
+	ret := m.ctrl.Call(m, "DescribeRole", arg0, arg1)
 	ret0, _ := ret[0].(*model.Role)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // DescribeRole indicates an expected call of DescribeRole.
-func (mr *MockRepoMockRecorder) DescribeRole(arg0 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) DescribeRole(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeRole", reflect.TypeOf((*MockRepo)(nil).DescribeRole), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeRole", reflect.TypeOf((*MockRepo)(nil).DescribeRole), arg0, arg1)
 }
 
 // ListRoles mocks base method.
-func (m *MockRepo) ListRoles(arg0, arg1 uint64) ([]*model.Role, error) {
+func (m *MockRepo) ListRoles(arg0 context.Context, arg1, arg2 uint64) ([]*model.Role, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListRoles", arg0, arg1)
+	ret := m.ctrl.Call(m, "ListRoles", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]*model.Role)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ListRoles indicates an expected call of ListRoles.
-func (mr *MockRepoMockRecorder) ListRoles(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) ListRoles(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRoles", reflect.TypeOf((*MockRepo)(nil).ListRoles), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRoles", reflect.TypeOf((*MockRepo)(nil).ListRoles), arg0, arg1, arg2)
 }
 
 // RemoveRole mocks base method.
-func (m *MockRepo) RemoveRole(arg0 uint64) (bool, error) {
+func (m *MockRepo) RemoveRole(arg0 context.Context, arg1 uint64) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveRole", arg0)
+	ret := m.ctrl.Call(m, "RemoveRole", arg0, arg1)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // RemoveRole indicates an expected call of RemoveRole.
-func (mr *MockRepoMockRecorder) RemoveRole(arg0 interface{}) *gomock.Call {
+func (mr *MockRepoMockRecorder) RemoveRole(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRole", reflect.TypeOf((*MockRepo)(nil).RemoveRole), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveRole", reflect.TypeOf((*MockRepo)(nil).RemoveRole), arg0, arg1)
+}
+
+// UpdateRole mocks base method.
+func (m *MockRepo) UpdateRole(arg0 context.Context, arg1 *model.Role) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRole", arg0, arg1)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateRole indicates an expected call of UpdateRole.
+func (mr *MockRepoMockRecorder) UpdateRole(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRole", reflect.TypeOf((*MockRepo)(nil).UpdateRole), arg0, arg1)
 }

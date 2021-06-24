@@ -2,15 +2,6 @@
 
 empty: ;
 
-postgres:
-	docker run -d --rm \
-		--name pg \
-		-e POSTGRES_PASSWORD=postgres \
-		-e PGDATA=/var/lib/postgresql/data/pgdata \
-		-v `pwd`/psqldata:/var/lib/postgresql/data \
-		-p 5432:5432 \
-		postgres
-
 swagger:
 	docker run -p 80:8080 \
 	-e BASE_URL=/swagger -e SWAGGER_JSON=/swagger/api.swagger.json \

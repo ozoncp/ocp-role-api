@@ -21,6 +21,8 @@ type OcpRoleApiClient interface {
 	ListRolesV1(ctx context.Context, in *ListRolesV1Request, opts ...grpc.CallOption) (*ListRolesV1Response, error)
 	DescribeRoleV1(ctx context.Context, in *DescribeRoleV1Request, opts ...grpc.CallOption) (*DescribeRoleV1Response, error)
 	CreateRoleV1(ctx context.Context, in *CreateRoleV1Request, opts ...grpc.CallOption) (*CreateRoleV1Response, error)
+	MultiCreateRoleV1(ctx context.Context, in *MultiCreateRoleV1Request, opts ...grpc.CallOption) (*MultiCreateRoleV1Response, error)
+	UpdateRoleV1(ctx context.Context, in *UpdateRoleV1Request, opts ...grpc.CallOption) (*UpdateRoleV1Response, error)
 	RemoveRoleV1(ctx context.Context, in *RemoveRoleV1Request, opts ...grpc.CallOption) (*RemoveRoleV1Response, error)
 }
 
@@ -59,6 +61,24 @@ func (c *ocpRoleApiClient) CreateRoleV1(ctx context.Context, in *CreateRoleV1Req
 	return out, nil
 }
 
+func (c *ocpRoleApiClient) MultiCreateRoleV1(ctx context.Context, in *MultiCreateRoleV1Request, opts ...grpc.CallOption) (*MultiCreateRoleV1Response, error) {
+	out := new(MultiCreateRoleV1Response)
+	err := c.cc.Invoke(ctx, "/ocp.role.api.OcpRoleApi/MultiCreateRoleV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ocpRoleApiClient) UpdateRoleV1(ctx context.Context, in *UpdateRoleV1Request, opts ...grpc.CallOption) (*UpdateRoleV1Response, error) {
+	out := new(UpdateRoleV1Response)
+	err := c.cc.Invoke(ctx, "/ocp.role.api.OcpRoleApi/UpdateRoleV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *ocpRoleApiClient) RemoveRoleV1(ctx context.Context, in *RemoveRoleV1Request, opts ...grpc.CallOption) (*RemoveRoleV1Response, error) {
 	out := new(RemoveRoleV1Response)
 	err := c.cc.Invoke(ctx, "/ocp.role.api.OcpRoleApi/RemoveRoleV1", in, out, opts...)
@@ -75,6 +95,8 @@ type OcpRoleApiServer interface {
 	ListRolesV1(context.Context, *ListRolesV1Request) (*ListRolesV1Response, error)
 	DescribeRoleV1(context.Context, *DescribeRoleV1Request) (*DescribeRoleV1Response, error)
 	CreateRoleV1(context.Context, *CreateRoleV1Request) (*CreateRoleV1Response, error)
+	MultiCreateRoleV1(context.Context, *MultiCreateRoleV1Request) (*MultiCreateRoleV1Response, error)
+	UpdateRoleV1(context.Context, *UpdateRoleV1Request) (*UpdateRoleV1Response, error)
 	RemoveRoleV1(context.Context, *RemoveRoleV1Request) (*RemoveRoleV1Response, error)
 	mustEmbedUnimplementedOcpRoleApiServer()
 }
@@ -91,6 +113,12 @@ func (UnimplementedOcpRoleApiServer) DescribeRoleV1(context.Context, *DescribeRo
 }
 func (UnimplementedOcpRoleApiServer) CreateRoleV1(context.Context, *CreateRoleV1Request) (*CreateRoleV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRoleV1 not implemented")
+}
+func (UnimplementedOcpRoleApiServer) MultiCreateRoleV1(context.Context, *MultiCreateRoleV1Request) (*MultiCreateRoleV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MultiCreateRoleV1 not implemented")
+}
+func (UnimplementedOcpRoleApiServer) UpdateRoleV1(context.Context, *UpdateRoleV1Request) (*UpdateRoleV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoleV1 not implemented")
 }
 func (UnimplementedOcpRoleApiServer) RemoveRoleV1(context.Context, *RemoveRoleV1Request) (*RemoveRoleV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveRoleV1 not implemented")
@@ -162,6 +190,42 @@ func _OcpRoleApi_CreateRoleV1_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OcpRoleApi_MultiCreateRoleV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MultiCreateRoleV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OcpRoleApiServer).MultiCreateRoleV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ocp.role.api.OcpRoleApi/MultiCreateRoleV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OcpRoleApiServer).MultiCreateRoleV1(ctx, req.(*MultiCreateRoleV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OcpRoleApi_UpdateRoleV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoleV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OcpRoleApiServer).UpdateRoleV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ocp.role.api.OcpRoleApi/UpdateRoleV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OcpRoleApiServer).UpdateRoleV1(ctx, req.(*UpdateRoleV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _OcpRoleApi_RemoveRoleV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveRoleV1Request)
 	if err := dec(in); err != nil {
@@ -198,6 +262,14 @@ var OcpRoleApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRoleV1",
 			Handler:    _OcpRoleApi_CreateRoleV1_Handler,
+		},
+		{
+			MethodName: "MultiCreateRoleV1",
+			Handler:    _OcpRoleApi_MultiCreateRoleV1_Handler,
+		},
+		{
+			MethodName: "UpdateRoleV1",
+			Handler:    _OcpRoleApi_UpdateRoleV1_Handler,
 		},
 		{
 			MethodName: "RemoveRoleV1",
